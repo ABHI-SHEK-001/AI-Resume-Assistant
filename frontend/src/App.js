@@ -1,12 +1,17 @@
 import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import AboutPage from "./pages/AboutPage";
 
 function App() {
-    return (
-        <div>
-            <h1>Welcome to AI Resume Assistant</h1>
-            <p>Your AI-powered resume helper.</p>
-        </div>
-    );
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<AboutPage />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
