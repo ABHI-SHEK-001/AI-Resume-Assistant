@@ -1,57 +1,49 @@
-/* Navbar Container */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 30px;
-  font-size: 18px;
-  font-weight: bold;
-  transition: background 0.3s ease-in-out;
+  padding: 15px 40px;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Light & Dark Mode Styles */
-.navbar.light {
-  background: #fff;
+.dark-mode .navbar {
+  background: #121212;
+  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
+}
+
+/* Navbar Links */
+.navbar a {
   color: #333;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.navbar.dark {
-  background: #222;
-  color: #fff;
-  box-shadow: 0px 4px 6px rgba(255, 255, 255, 0.1);
-}
-
-/* Navbar Title */
-.navbar-left h2 {
-  margin: 0;
-}
-
-/* Navigation Links */
-.navbar-links {
-  display: flex;
-  gap: 20px;
-}
-
-.navbar-links a {
+  font-weight: 500;
   text-decoration: none;
-  color: inherit;
-  transition: color 0.3s ease-in-out;
+  padding: 10px 15px;
+  transition: color 0.3s ease;
 }
 
-.navbar-links a:hover {
+.dark-mode .navbar a {
+  color: #ddd;
+}
+
+.navbar a:hover {
   color: #007bff;
+}
+
+.dark-mode .navbar a:hover {
+  color: #00bfff;
 }
 
 /* Dark Mode Toggle */
 .dark-mode-toggle {
-  cursor: pointer;
-  padding: 8px 12px;
+  background: #e0e0e0;
   border-radius: 20px;
-  background: rgba(0, 0, 0, 0.1);
-  transition: background 0.3s ease-in-out;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.3s ease;
 }
 
-.navbar.dark .dark-mode-toggle {
-  background: rgba(255, 255, 255, 0.2);
+.dark-mode .dark-mode-toggle {
+  background: #333;
 }

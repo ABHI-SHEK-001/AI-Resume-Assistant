@@ -1,34 +1,136 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
-import "../styles/HomePage.css"; // Import the new CSS
+import axios from "axios";
+import "../styles/HomePage.css";
+import "../styles/UploadPage.css";
 
-const HomePage = () => {
-    const navigate = useNavigate();
+export default function HomePage() {
+  const [file, setFile] = useState(null);
+  const [message, setMessage] = useState("");
+  const [feedback, setFeedback] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
 
-    return (
-        <div className="home-container">
-            <div className="overlay"></div> {/* Overlay for better text visibility */}
-            <motion.div
-                className="home-content"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-            >
-                <h1>Welcome to AI Resume Assistant</h1>
-                <p>Create AI-powered resumes effortlessly.</p>
-                <motion.button
-                    className="start-button"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    transition={{ type: "spring", stiffness: 200 }}
-                    onClick={() => navigate("/upload")}
-                >
-                    Get Started
-                </motion.button>
-            </motion.div>
-        </div>
-    );
-};
+  const uploadSectionRef = useRef(null);
 
-export default HomePage;
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
+  };
+
+  const handleUpload = async () => {
+    if (!file) {
+      setMessage("Please select a file first.");
+      return;
+    }
+
+    setLoading(true);
+    const formData = new FormData();
+    formData.append("resume", file);
+
+    try {
+      const response = await axios.post("http://127.0.0.1:5000/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      setMessage("File uploaded successfully!");
+      setFeedback(response.data.feedback);
+    } catch (error) {
+      console.error("Upload error:", error);
+      setMessage("Error uploading file.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const scrollToUpload = () => {
+    uploadSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  return (
+    <div>
+      {/* 🔹 Hero Section */}
+      <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-gray-900 to-black text-white text-center">
+        <motion.h1
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8 }}
+          className="text-6xl md:text-8xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 drop-shadow-lg"
+        >
+          AI Resume Assistant
+        </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.8 }}
+          className="text-xl md:text-2xl mt-4 text-gray-300"
+        >
+          Create AI-powered resumes effortlessly.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8, duration: 0.8 }}
+          className="search-bar-container"
+        >
+          
+        </motion.div>
+
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={scrollToUpload}
+          className="mt-6 px-6 py-3 text-lg font-semibold bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-400"
+        >
+          Get Started
+        </motion.button>
+      </div>
+
+      {/* 🔹 Upload Section */}
+      <div ref={uploadSectionRef} id="upload-section" className="upload-container">
+        <motion.h1
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8 }}
+          className="upload-title"
+        >
+          Upload Your Resume
+        </motion.h1>
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8 }}
+          className="upload-box"
+        >
+          <input type="file" className="form-control" onChange={handleFileChange} />
+          <button className="btn btn-primary mt-3" onClick={handleUpload}>
+            Upload
+          </button>
+        </motion.div>
+
+        <p className="upload-message">{message}</p>
+
+        {/* AI-generated Feedback */}
+        {loading ? (
+          <p className="loading">Processing...</p>
+        ) : feedback && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="feedback-box"
+          >
+            <h3>🔍 AI Feedback:</h3>
+            <ul>
+              {feedback.split("*").map((point, index) => (
+                point.trim() && <li key={index}>• {point.trim()}</li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+      </div>
+    </div>
+  );
+}
