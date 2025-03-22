@@ -36,11 +36,11 @@ if not os.path.exists(UPLOAD_FOLDER):
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["ALLOWED_EXTENSIONS"] = {"pdf", "docx"}
 
-# ✅ Function to check allowed file types
+#  Function to check allowed file types
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in app.config["ALLOWED_EXTENSIONS"]
 
-# ✅ Resume Upload & Analysis Route
+#  Resume Upload & Analysis Route
 @app.route("/upload", methods=["POST"])
 def upload_resume():
     if "resume" not in request.files:
@@ -66,7 +66,7 @@ def upload_resume():
 
     return jsonify({"error": "❌ Invalid file type"}), 400
 
-# ✅ Function to extract text from a PDF resume
+#  Function to extract text from a PDF resume
 def extract_text_from_pdf(pdf_path):
     text = ""
     with open(pdf_path, "rb") as file:
@@ -75,7 +75,7 @@ def extract_text_from_pdf(pdf_path):
             text += page.extract_text() + "\n"
     return text.strip()
 
-# ✅ Function to analyze resume text using Gemini AI
+#  Function to analyze resume text using Gemini AI
 def analyze_resume_text(text):
     model = genai.GenerativeModel("gemini-1.5-flash")  # Fast, cost-effective model
 
@@ -99,14 +99,14 @@ def analyze_resume_text(text):
         try:
             ai_response = response.text.strip()
 
-            # ✅ Ensure AI response is valid JSON
+            #  Ensure AI response is valid JSON
             if not ai_response.startswith("{") or not ai_response.endswith("}"):
                 print("⚠️ AI Response is not a valid JSON object. Attempting to fix formatting.")
                 ai_response = ai_response[ai_response.find("{") : ai_response.rfind("}") + 1]
 
             parsed_response = json.loads(ai_response)
 
-            # ✅ Scale resume score to 0-100 range
+            #  Scale resume score to 0-100 range
             if "score" in parsed_response and isinstance(parsed_response["score"], (int, float)):
                 parsed_response["score"] = round(parsed_response["score"] * 10, 1)  # Multiply by 10
 
@@ -132,7 +132,7 @@ def analyze_resume_text(text):
 
 
 # --------------------------------------------------
-# ✅ Chatbot API (Handles User Queries)
+#  Chatbot API (Handles User Queries)
 # --------------------------------------------------
 
 @app.route("/chatbot", methods=["POST"])
@@ -149,7 +149,7 @@ def chatbot():
 
     return jsonify({"response": response_text})
 
-# ✅ Function to get AI response
+#  Function to get AI response
 def get_ai_response(user_input):
     """Generate chatbot responses using Gemini AI"""
     model = genai.GenerativeModel("gemini-1.5-flash")
@@ -172,6 +172,6 @@ def get_ai_response(user_input):
     return response.text.strip() if response and response.text else "⚠️ Error: Unable to connect to AI."
 
 
-# ✅ Run Flask App
+#  Run Flask App
 if __name__ == "__main__":
     app.run(debug=True)
