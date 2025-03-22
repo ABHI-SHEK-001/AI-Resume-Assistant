@@ -4,16 +4,23 @@ import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import Navbar from "./components/Navbar";
+import ChatbotButton from "./components/ChatbotButton";
+import ChatbotWindow from "./components/ChatbotWindow"; // Import chatbot window
 
 const App = () => {
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem("darkMode") === "true"
   );
+  const [isChatOpen, setIsChatOpen] = useState(false); // Chatbot visibility state
 
   const toggleDarkMode = () => {
     const newDarkMode = !darkMode;
     setDarkMode(newDarkMode);
     localStorage.setItem("darkMode", newDarkMode);
+  };
+
+  const toggleChat = () => {
+    setIsChatOpen(!isChatOpen); // Toggle chatbot visibility
   };
 
   return (
@@ -25,6 +32,8 @@ const App = () => {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
         </Routes>
+        <ChatbotButton toggleChat={toggleChat} />
+        {isChatOpen && <ChatbotWindow toggleChat={toggleChat} />} {/* Conditionally render chatbot */}
       </div>
     </Router>
   );
