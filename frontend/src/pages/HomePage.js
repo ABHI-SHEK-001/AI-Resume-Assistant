@@ -7,9 +7,8 @@ import "../styles/UploadPage.css";
 export default function HomePage() {
   const [file, setFile] = useState(null);
   const [message, setMessage] = useState("");
-  const [feedback, setFeedback] = useState("");
+  const [feedback, setFeedback] = useState(null); // JSON object instead of string
   const [loading, setLoading] = useState(false);
-  const [search, setSearch] = useState("");
 
   const uploadSectionRef = useRef(null);
 
@@ -32,11 +31,12 @@ export default function HomePage() {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      setMessage("File uploaded successfully!");
-      setFeedback(response.data.feedback);
+      setMessage("✅ File uploaded successfully!");
+      setFeedback(response.data); // Store JSON object
     } catch (error) {
       console.error("Upload error:", error);
-      setMessage("Error uploading file.");
+      setMessage("❌ Error uploading file.");
+      setFeedback(null);
     } finally {
       setLoading(false);
     }
@@ -67,15 +67,6 @@ export default function HomePage() {
         >
           Create AI-powered resumes effortlessly.
         </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.8 }}
-          className="search-bar-container"
-        >
-          
-        </motion.div>
 
         <motion.button
           whileHover={{ scale: 1.1 }}
@@ -123,9 +114,23 @@ export default function HomePage() {
             className="feedback-box"
           >
             <h3>🔍 AI Feedback:</h3>
+            
+            {/* Resume Score */}
+            <p><strong>🎯 Resume Score:</strong> {feedback.score}/100</p>
+
+            {/* Strengths */}
+            <h4>✅ Strengths:</h4>
             <ul>
-              {feedback.split("*").map((point, index) => (
-                point.trim() && <li key={index}>• {point.trim()}</li>
+              {feedback.strengths.map((point, index) => (
+                <li key={index}>• {point}</li>
+              ))}
+            </ul>
+
+            {/* Fix Suggestions */}
+            <h4>🛠️ Smart Fix Suggestions:</h4>
+            <ul>
+              {feedback.fix_suggestions.map((point, index) => (
+                <li key={index}>• {point}</li>
               ))}
             </ul>
           </motion.div>
