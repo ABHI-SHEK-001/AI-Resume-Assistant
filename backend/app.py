@@ -5,6 +5,7 @@ from werkzeug.utils import secure_filename
 import PyPDF2  # For extracting text from PDFs
 from flask_cors import CORS  # Enable frontend requests
 import google.generativeai as genai  # Import Gemini AI SDK
+import json  # To parse structured AI responses
 
 # Load environment variables from .env file
 load_dotenv()
@@ -55,13 +56,13 @@ def upload_resume():
         filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
         file.save(filepath)
 
-        # Extract text from the PDF (for analysis)
+        # Extract text from PDF
         extracted_text = extract_text_from_pdf(filepath)
 
-        # AI-based resume analysis using Gemini AI
+        # AI-powered resume feedback
         ai_feedback = analyze_resume_text(extracted_text)
 
-        return jsonify({"message": "✅ File uploaded successfully!", "feedback": ai_feedback})
+        return jsonify(ai_feedback)
 
     return jsonify({"error": "❌ Invalid file type"}), 400
 
@@ -76,23 +77,61 @@ def extract_text_from_pdf(pdf_path):
 
 # Function to analyze resume text using Gemini AI
 def analyze_resume_text(text):
-    """Send resume text to Gemini AI and get AI-powered feedback."""
     model = genai.GenerativeModel("gemini-1.5-flash")  # Fast, cost-effective model
 
     prompt = f"""
-    You are an AI-powered resume evaluator. Analyze the following resume text 
-    and provide feedback on strengths, weaknesses, and improvements.
+    You are an AI-powered resume evaluator. Analyze the following resume text and return structured feedback.
+
+    **Return the response in STRICTLY VALID JSON format (nothing else, no explanation, no pre-text, only JSON):**
+    {{
+      "score": <numeric_score>,
+      "strengths": ["<strength1>", "<strength2>", "<strength3>"],
+      "fix_suggestions": ["<suggestion1>", "<suggestion2>", "<suggestion3>"]
+    }}
 
     Resume Text:
     {text}
-
-    Provide clear, structured, and actionable feedback.
     """
 
     response = model.generate_content(prompt)
 
-    # Extract AI response
-    return response.text if response else "❌ Error: No response from AI."
+    if response and response.text:
+        try:
+            # ✅ Try to parse AI response as JSON
+            ai_response = response.text.strip()
+
+            # ✅ Force AI to return valid JSON
+            if not ai_response.startswith("{") or not ai_response.endswith("}"):
+                print("⚠️ AI Response is not a valid JSON object. Attempting to fix formatting.")
+                ai_response = ai_response[ai_response.find("{") : ai_response.rfind("}") + 1]
+
+            # ✅ Convert AI response into Python Dictionary
+            parsed_response = json.loads(ai_response)
+
+            # ✅ Scale resume score to 0-100 range
+            if "score" in parsed_response and isinstance(parsed_response["score"], (int, float)):
+                parsed_response["score"] = round(parsed_response["score"] * 10, 1)  # Multiply by 10
+
+            # ✅ Ensure correct data structure
+            return {
+                "score": parsed_response.get("score", "❌ Error"),
+                "strengths": parsed_response.get("strengths", ["AI did not return strengths"]),
+                "fix_suggestions": parsed_response.get("fix_suggestions", ["AI did not return improvements"])
+            }
+        except json.JSONDecodeError:
+            print("❌ JSON Parsing Error: AI response is not in valid JSON format.")
+            print(f"RAW AI Response: {ai_response}")  # Debugging
+            return {
+                "score": "❌ Error",
+                "strengths": ["AI response was not properly formatted."],
+                "fix_suggestions": ["Try re-uploading in a different format."]
+            }
+
+    return {
+        "score": "❌ Error",
+        "strengths": ["No response from AI"],
+        "fix_suggestions": ["Check API configuration and try again."]
+    }
 
 # Run the Flask app
 if __name__ == "__main__":
