@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/HomePage.css";
 import "../styles/UploadPage.css";
@@ -9,8 +10,8 @@ export default function HomePage() {
   const [message, setMessage] = useState("");
   const [feedback, setFeedback] = useState(null); // JSON object instead of string
   const [loading, setLoading] = useState(false);
-
   const uploadSectionRef = useRef(null);
+  const navigate = useNavigate();
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
@@ -32,7 +33,7 @@ export default function HomePage() {
       });
 
       setMessage("✅ File uploaded successfully!");
-      setFeedback(response.data); // Store JSON object
+      setFeedback(response.data);
     } catch (error) {
       console.error("Upload error:", error);
       setMessage("❌ Error uploading file.");
@@ -103,7 +104,6 @@ export default function HomePage() {
 
         <p className="upload-message">{message}</p>
 
-        {/* AI-generated Feedback */}
         {loading ? (
           <p className="loading">Processing...</p>
         ) : feedback && (
@@ -114,19 +114,13 @@ export default function HomePage() {
             className="feedback-box"
           >
             <h3>🔍 AI Feedback:</h3>
-            
-            {/* Resume Score */}
             <p><strong>🎯 Resume Score:</strong> {feedback.score}/100</p>
-
-            {/* Strengths */}
             <h4>✅ Strengths:</h4>
             <ul>
               {feedback.strengths.map((point, index) => (
                 <li key={index}>• {point}</li>
               ))}
             </ul>
-
-            {/* Fix Suggestions */}
             <h4>🛠️ Smart Fix Suggestions:</h4>
             <ul>
               {feedback.fix_suggestions.map((point, index) => (
@@ -135,6 +129,20 @@ export default function HomePage() {
             </ul>
           </motion.div>
         )}
+      </div>
+
+      {/* 🔹 Compare Resumes Section */}
+      <div className="compare-resumes-section">
+        <h2>Wanna Compare Resumes?</h2>
+        <p>Analyze and compare multiple resumes with AI-powered insights.</p>
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          className="compare-button"
+          onClick={() => navigate("/compare")}
+        >
+          Compare Now
+        </motion.button>
       </div>
     </div>
   );

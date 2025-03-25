@@ -13,21 +13,54 @@
 
 .upload-box {
   background: white;
-  padding: 20px;
+  padding: 25px;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.upload-box input[type="file"] {
+  border: 1px solid #ccc;
+  padding: 12px;
+  border-radius: 5px;
+  width: 100%;
+  max-width: 350px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.upload-box button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.upload-box button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .upload-message {
   margin-top: 15px;
   font-weight: bold;
   color: green;
+  text-align: center;
+  display: block;
 }
 
 .feedback-box {
   max-width: 650px;
   background: #f8f9fa;
-  padding: 20px;
+  padding: 25px;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   text-align: left;
@@ -38,7 +71,7 @@
   font-size: 22px;
   font-weight: bold;
   color: #333;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .feedback-box ul {

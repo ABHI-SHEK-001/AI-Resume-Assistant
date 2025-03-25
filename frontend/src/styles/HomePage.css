@@ -1,3 +1,8 @@
+.homepage * {
+  all: unset;
+}
+
+
 .homepage {
   display: flex;
   flex-direction: column;
@@ -45,6 +50,48 @@
 }
 
 .get-started-btn:hover {
+  background: #0056b3;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* 🔹 Compare Resumes Section */
+.compare-resumes-section {
+  background: #e3f2fd;
+  padding: 30px;
+  margin-top: 40px;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.compare-resumes-section h2 {
+  font-size: 1.8rem;
+  color: #007bff;
+}
+
+.compare-resumes-section p {
+  font-size: 1.1rem;
+  color: #444;
+  margin-bottom: 15px;
+}
+
+.compare-button {
+  padding: 12px 24px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.compare-button:hover {
   background: #0056b3;
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
 }
