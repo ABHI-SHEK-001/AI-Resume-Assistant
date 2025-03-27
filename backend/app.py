@@ -55,11 +55,20 @@ def upload_resume():
 
         # Extract text
         extracted_text = extract_text_from_pdf(filepath)
+
+        # 🔥 Get ATS Score
+        ats_score = calculate_ats_score(extracted_text)
+
+        # 🔥 Get AI-powered resume analysis
         ai_feedback = analyze_resume_text(extracted_text)
+        
+        # ✅ Add ATS Score to AI Feedback
+        ai_feedback["ats_score"] = ats_score  
 
         return jsonify(ai_feedback)
 
     return jsonify({"error": "❌ Invalid file type"}), 400
+
 
 # ✅ Function to extract text from PDFs
 def extract_text_from_pdf(pdf_path):
@@ -112,6 +121,36 @@ def analyze_resume_text(text):
             return {"score": "❌ Error", "strengths": ["Invalid AI response."], "fix_suggestions": ["Try again."]}
 
     return {"score": "❌ Error", "strengths": ["No response from AI"], "fix_suggestions": ["Check API settings."]}
+
+
+def calculate_ats_score(resume_text):
+    """
+    Calculates an ATS compatibility score for a resume.
+    Higher scores mean better chances of passing an ATS scan.
+    """
+    important_keywords = [
+        "experience", "skills", "education", "projects", "certifications",
+        "achievements", "leadership", "responsibilities", "languages", "tools"
+    ]
+
+    formatting_penalties = ["table", "image", "chart", "graphic", "border"]
+    
+    score = 0
+    total_keywords = len(important_keywords)
+
+    # ✅ Count important keywords
+    keyword_count = sum(1 for word in important_keywords if word.lower() in resume_text.lower())
+    keyword_score = (keyword_count / total_keywords) * 50  # Keywords contribute 50%
+
+    # ❌ Penalize bad formatting
+    penalty = sum(1 for word in formatting_penalties if word.lower() in resume_text.lower()) * 5  # -5 per bad element
+    formatting_score = max(0, 50 - penalty)  # Formatting contributes 50%
+
+    # 🔥 Final ATS Score (out of 100)
+    ats_score = round(keyword_score + formatting_score, 1)
+
+    return ats_score
+
 
 # --------------------------------------------------
 # ✅ Chatbot API (Handles User Queries)
@@ -244,6 +283,103 @@ def analyze_resume_comparison(text1, text2):
         "best_score": "N/A",
         "improvements": ["No response from AI."]
     }
+
+# ✅ AI-Powered Job-Specific Resume Tailoring
+@app.route("/tailor-resume", methods=["POST"])
+def tailor_resume():
+    """Enhances a resume to match a job description."""
+    data = request.json
+    resume_text = data.get("resume_text", "").strip()
+    job_description = data.get("job_description", "").strip()
+
+    if not resume_text or not job_description:
+        return jsonify({"error": "Resume text and job description are required."}), 400
+
+    tailored_resume = generate_tailored_resume(resume_text, job_description)
+    return jsonify({"tailored_resume": tailored_resume})
+
+# ✅ AI Function to Tailor Resume for a Job
+def generate_tailored_resume(resume_text, job_description):
+    """Uses AI to modify a resume to better match a job posting."""
+    model = genai.GenerativeModel("gemini-1.5-flash")
+
+    prompt = f"""
+    You are a professional resume optimizer.
+    Improve the following resume by aligning it with the given job description.
+
+    **Rules:**
+    - Maintain authenticity; do not invent fake experiences.
+    - Highlight relevant skills and keywords from the job description.
+    - Ensure the resume is ATS-friendly and concise.
+
+    **Return the response in PLAIN TEXT (no JSON, no explanations).**
+
+    **Job Description:**
+    {job_description}
+
+    **Original Resume:**
+    {resume_text}
+
+    **Optimized Resume:**
+    """
+
+    response = model.generate_content(prompt)
+    return response.text.strip() if response and response.text else "⚠️ Error: AI could not generate a tailored resume."
+
+# Ensure the upload folder exists
+os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
+
+@app.route("/generate-cover-letter", methods=["POST"])
+def generate_cover_letter():
+    if "resume" not in request.files:
+        return jsonify({"error": "No resume file provided"}), 400
+
+    resume_file = request.files["resume"]
+    job_description = request.form.get("job_description", "").strip()
+
+    if resume_file.filename == "":
+        return jsonify({"error": "No selected file"}), 400
+    if not job_description:
+        return jsonify({"error": "Job description is required"}), 400
+
+    # Save the resume file (optional, if needed)
+    resume_path = os.path.join(app.config["UPLOAD_FOLDER"], secure_filename(resume_file.filename))
+    resume_file.save(resume_path)
+
+    # Extract text from resume (if PDF)
+    resume_text = extract_text_from_pdf(resume_path)
+
+    # Use Gemini AI to generate a cover letter
+    cover_letter = generate_ai_cover_letter(resume_text, job_description)
+
+    return jsonify({"cover_letter": cover_letter})
+
+# ✅ AI Function to Generate Cover Letter
+def generate_ai_cover_letter(resume_text, job_description):
+    """Uses AI to generate a tailored cover letter based on resume and job description."""
+    model = genai.GenerativeModel("gemini-1.5-flash")
+
+    prompt = f"""
+    You are a professional career assistant.
+    Generate a **concise, well-formatted, and professional cover letter** tailored for the given job description.
+    
+    **Guidelines:**
+    - Keep it **concise (150-250 words)**.
+    - Highlight relevant **skills and experiences** from the resume.
+    - Make it **ATS-friendly** and professional.
+    - Avoid generic phrases; make it specific to the job.
+
+    **Job Description:**
+    {job_description}
+
+    **Resume Content:**
+    {resume_text}
+
+    **Generated Cover Letter:**
+    """
+
+    response = model.generate_content(prompt)
+    return response.text.strip() if response and response.text else "⚠️ Error: AI could not generate the cover letter."
 
 
 # ✅ Run Flask App

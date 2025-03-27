@@ -6,13 +6,15 @@ import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import Navbar from "./components/Navbar";
 import ChatbotButton from "./components/ChatbotButton";
-import ChatbotWindow from "./components/ChatbotWindow"; // Import chatbot window
+import ChatbotWindow from "./components/ChatbotWindow";
+import ResumeTailor from "./ResumeTailor"; // Import ResumeTailor
+import CoverLetter from "./pages/CoverLetter";
 
 const App = () => {
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem("darkMode") === "true"
   );
-  const [isChatOpen, setIsChatOpen] = useState(false); // Chatbot visibility state
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const toggleDarkMode = () => {
     const newDarkMode = !darkMode;
@@ -21,7 +23,7 @@ const App = () => {
   };
 
   const toggleChat = () => {
-    setIsChatOpen(!isChatOpen); // Toggle chatbot visibility
+    setIsChatOpen(!isChatOpen);
   };
 
   return (
@@ -33,9 +35,12 @@ const App = () => {
           <Route path="/compare" element={<ComparePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/tailor-resume" element={<ResumeTailor />} /> {/* Add ResumeTailor Route */}
+          <Route path="/cover-letter" element={<CoverLetter />} />
+
         </Routes>
         <ChatbotButton toggleChat={toggleChat} />
-        {isChatOpen && <ChatbotWindow toggleChat={toggleChat} />} {/* Conditionally render chatbot */}
+        {isChatOpen && <ChatbotWindow toggleChat={toggleChat} />}
       </div>
     </Router>
   );
