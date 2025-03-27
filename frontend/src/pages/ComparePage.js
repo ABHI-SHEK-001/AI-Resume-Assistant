@@ -70,6 +70,8 @@ export default function ComparePage() {
           <h2>🔍 Comparison Result</h2>
           <p><strong>Best Resume:</strong> {comparisonResult.best_resume}</p>
           <p><strong>Score:</strong> {comparisonResult.best_score}/100</p>
+          <p><strong>📊 ATS Compatibility Score:</strong> {comparisonResult.ats_score}/100</p>
+
 
           <div className="comparison-table">
             <div className="column">

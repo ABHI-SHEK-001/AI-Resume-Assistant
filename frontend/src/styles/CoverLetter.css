@@ -1,0 +1,211 @@
+/* 🌿 General Styles */
+body {
+    background-color: #e8f5e9; /* Light green background */
+    font-family: "Poppins", sans-serif;
+    color: #333;
+    text-align: center;
+    padding: 20px;
+}
+
+/* 🔹 Cover Letter Generator Section */
+.cover-letter-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    margin: 2rem auto;
+    width: 90%;
+    max-width: 600px;
+    text-align: center;
+}
+
+/* 🎯 Title & Description */
+.cover-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #2e7d32;
+    margin-bottom: 1rem;
+}
+
+.cover-description {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 1.5rem;
+    padding: 0 10px;
+}
+
+/* 📝 Form Styles */
+.cover-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+}
+
+.cover-input,
+.cover-textarea {
+    padding: 12px;
+    border: 2px solid #a5d6a7;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: #f1f8e9;
+    color: #333;
+    width: 100%;
+}
+
+.cover-textarea {
+    height: 100px;
+    resize: none;
+}
+
+/* 🎯 Generate Button */
+.cover-btn {
+    padding: 12px 20px;
+    font-size: 1rem;
+    background: #43a047;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.cover-btn:hover {
+    background: #2e7d32;
+    transform: scale(1.05);
+}
+
+/* ✅ Success Message */
+.success-message {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #1b5e20;
+    margin-top: 10px;
+}
+
+/* 📜 Cover Letter Output */
+.cover-output {
+    background: white;
+    padding: 1rem;
+    margin-top: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    width: 100%;
+}
+
+/* 🖋️ Cover Letter Content */
+.cover-letter-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+h1 {
+    font-size: 2.2rem;
+    background: linear-gradient(90deg, #388e3c, #2e7d32);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+}
+
+/* ✏️ Input Fields */
+.input-section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.form-control {
+    width: 100%;
+    max-width: 500px;
+    padding: 12px;
+    font-size: 1rem;
+    border: 2px solid #388e3c;
+    background: #f1f8e9;
+    color: #333;
+    border-radius: 8px;
+}
+
+/* 🏷️ Job Description Box */
+.job-description-input {
+    width: 100%;
+    max-width: 500px;
+    height: 120px;
+    padding: 12px;
+    font-size: 1rem;
+    border: 2px solid #388e3c;
+    background: #f1f8e9;
+    color: #333;
+    border-radius: 8px;
+    resize: none;
+}
+
+/* 🚀 Generate Button */
+.generate-button {
+    background: linear-gradient(90deg, #43a047, #2e7d32);
+    color: white;
+    padding: 12px 24px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.generate-button:hover {
+    background: linear-gradient(90deg, #388e3c, #1b5e20);
+    transform: scale(1.05);
+}
+
+/* 📩 Generated Cover Letter */
+.cover-letter-output {
+    margin-top: 30px;
+    padding: 15px;
+    background: #f0f4c3;
+    border-radius: 10px;
+    text-align: left;
+    color: #333;
+}
+
+/* 🎯 Cover Letter Content */
+.cover-letter-output h3 {
+    font-size: 1.5rem;
+    color: #2e7d32;
+}
+
+/* 🎨 Preformatted Text */
+pre {
+    background: #e8f5e9;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 1rem;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* 📱 Responsive Design */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    .form-control,
+    .job-description-input {
+        max-width: 100%;
+    }
+
+    .generate-button {
+        width: 100%;
+    }
+}

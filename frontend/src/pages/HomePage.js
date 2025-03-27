@@ -1,9 +1,12 @@
 import React, { useState, useRef } from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/HomePage.css";
 import "../styles/UploadPage.css";
+import "../styles/ResumeTailor.css";
+import "../styles/CoverLetter.css";
 
 export default function HomePage() {
   const [file, setFile] = useState(null);
@@ -115,6 +118,8 @@ export default function HomePage() {
           >
             <h3>🔍 AI Feedback:</h3>
             <p><strong>🎯 Resume Score:</strong> {feedback.score}/100</p>
+            <p><strong>📊 ATS Compatibility Score:</strong> {feedback.ats_score}/100</p>
+
             <h4>✅ Strengths:</h4>
             <ul>
               {feedback.strengths.map((point, index) => (
@@ -144,6 +149,43 @@ export default function HomePage() {
           Compare Now
         </motion.button>
       </div>
+
+
+      {/* 🔹 Tailor Resume Section - Improved UI */}
+      <section className="tailor-resume-section">
+        <h2 className="tailor-title">Tailor Your Resume</h2>
+        <p className="tailor-description">
+          Optimize your resume based on a job description for better ATS compatibility and job matching.
+        </p>
+        <Link to="/tailor-resume">
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            className="tailor-btn"
+          >
+            Get Started
+          </motion.button>
+        </Link>
+      </section>
+
+      {/* 🔹 AI Cover Letter Generator Section */}
+      <section className="cover-letter-section">
+        <h2 className="cover-letter-title">Generate AI Cover Letter</h2>
+        <p className="cover-letter-description">
+          Get a professional cover letter tailored to your resume and job description.
+        </p>
+        <Link to="/cover-letter">
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            className="cover-letter-btn"
+          >
+            Generate Now
+          </motion.button>
+        </Link>
+      </section>
+
+
     </div>
   );
 }
