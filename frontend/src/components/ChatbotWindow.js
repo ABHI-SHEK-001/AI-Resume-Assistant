@@ -28,7 +28,7 @@ const ChatbotWindow = ({ toggleChat }) => {
     setIsTyping(true); // Show typing animation
 
     try {
-      const response = await axios.post("http://127.0.0.1:5000/chatbot", {
+      const response = await axios.post("https://ai-resume-assistant.onrender.com/chatbot", {
         message: input,
       });
 

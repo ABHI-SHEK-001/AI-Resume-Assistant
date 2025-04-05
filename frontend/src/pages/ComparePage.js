@@ -27,7 +27,7 @@ export default function ComparePage() {
     formData.append("resume2", file2);
 
     try {
-      const response = await axios.post("http://127.0.0.1:5000/compare", formData, {
+      const response = await axios.post("https://ai-resume-assistant.onrender.com/compare", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

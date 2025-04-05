@@ -10,6 +10,8 @@ import ChatbotWindow from "./components/ChatbotWindow";
 import ResumeTailor from "./ResumeTailor"; // Import ResumeTailor
 import CoverLetter from "./pages/CoverLetter";
 
+
+
 const App = () => {
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem("darkMode") === "true"
