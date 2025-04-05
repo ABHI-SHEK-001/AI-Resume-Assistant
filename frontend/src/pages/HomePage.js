@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import jsPDF from "jspdf"; // ✅ Added
 import "../styles/HomePage.css";
 import "../styles/UploadPage.css";
 import "../styles/ResumeTailor.css";
@@ -11,7 +12,7 @@ import "../styles/CoverLetter.css";
 export default function HomePage() {
   const [file, setFile] = useState(null);
   const [message, setMessage] = useState("");
-  const [feedback, setFeedback] = useState(null); // JSON object instead of string
+  const [feedback, setFeedback] = useState(null);
   const [loading, setLoading] = useState(false);
   const uploadSectionRef = useRef(null);
   const navigate = useNavigate();
@@ -48,6 +49,32 @@ export default function HomePage() {
 
   const scrollToUpload = () => {
     uploadSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const downloadPDF = () => {
+    if (!feedback) return;
+
+    const doc = new jsPDF();
+
+    doc.setFontSize(16);
+    doc.text("AI Resume Feedback", 20, 20);
+
+    doc.setFontSize(12);
+    doc.text(`🎯 Resume Score: ${feedback.score}/100`, 20, 40);
+    doc.text(`📊 ATS Compatibility Score: ${feedback.ats_score}/100`, 20, 50);
+
+    doc.text("✅ Strengths:", 20, 70);
+    feedback.strengths.forEach((point, index) => {
+      doc.text(`- ${point}`, 25, 80 + index * 10);
+    });
+
+    const offset = 80 + feedback.strengths.length * 10 + 10;
+    doc.text("🛠️ Fix Suggestions:", 20, offset);
+    feedback.fix_suggestions.forEach((point, index) => {
+      doc.text(`- ${point}`, 25, offset + 10 + index * 10);
+    });
+
+    doc.save("Resume_Feedback.pdf");
   };
 
   return (
@@ -132,6 +159,11 @@ export default function HomePage() {
                 <li key={index}>• {point}</li>
               ))}
             </ul>
+
+            {/* 📄 PDF Download Button */}
+            <button className="btn btn-success mt-3" onClick={downloadPDF}>
+              Download PDF Report
+            </button>
           </motion.div>
         )}
       </div>
@@ -150,8 +182,7 @@ export default function HomePage() {
         </motion.button>
       </div>
 
-
-      {/* 🔹 Tailor Resume Section - Improved UI */}
+      {/* 🔹 Tailor Resume Section */}
       <section className="tailor-resume-section">
         <h2 className="tailor-title">Tailor Your Resume</h2>
         <p className="tailor-description">
@@ -168,7 +199,7 @@ export default function HomePage() {
         </Link>
       </section>
 
-      {/* 🔹 AI Cover Letter Generator Section */}
+      {/* 🔹 Cover Letter Generator */}
       <section className="cover-letter-section">
         <h2 className="cover-letter-title">Generate AI Cover Letter</h2>
         <p className="cover-letter-description">
@@ -184,8 +215,6 @@ export default function HomePage() {
           </motion.button>
         </Link>
       </section>
-
-
     </div>
   );
 }
