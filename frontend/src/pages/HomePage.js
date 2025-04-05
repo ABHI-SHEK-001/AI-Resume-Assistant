@@ -32,7 +32,7 @@ export default function HomePage() {
     formData.append("resume", file);
 
     try {
-      const response = await axios.post("http://127.0.0.1:5000/upload", formData, {
+      const response = await axios.post("https://ai-resume-assistant.onrender.com/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
