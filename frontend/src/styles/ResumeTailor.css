@@ -29,17 +29,19 @@
   }
   
   .tailor-btn {
-    padding: 10px 20px;
-    font-size: 1rem;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.3s ease;
+    padding: 12px 24px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
   }
   
   .tailor-btn:hover {
-    background-color: #0056b3;
+    background: #0056b3;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
   }
   
