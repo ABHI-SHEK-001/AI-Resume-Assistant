@@ -7,6 +7,23 @@ body {
     padding: 20px;
 }
 
+.cover-letter-btn{
+  padding: 12px 24px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cover-letter-btn:hover {
+    background: #0056b3;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+  }
+
 /* 🔹 Cover Letter Generator Section */
 .cover-letter-section {
     display: flex;
