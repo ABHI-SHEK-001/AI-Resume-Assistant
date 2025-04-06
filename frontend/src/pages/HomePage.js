@@ -50,8 +50,14 @@ export default function HomePage() {
   const scrollToUpload = () => {
     uploadSectionRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+  const scrollToContact = () => {
+    uploadSectionRef.current?.scrollIntoView({behavior: "smooth"});
+  };
+  const scrollToAbout = () => {
+    uploadSectionRef.current?.scrollIntoView({behavior: "smooth"});
+  };
 
-  const downloadPDF = () => {
+  const downloadPDF = () => { 
     if (!feedback) return;
 
     const doc = new jsPDF();
