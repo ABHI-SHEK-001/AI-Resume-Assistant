@@ -8,6 +8,8 @@ import "../styles/HomePage.css";
 import "../styles/UploadPage.css";
 import "../styles/ResumeTailor.css";
 import "../styles/CoverLetter.css";
+import Contact from "./ContactPage";
+
 
 export default function HomePage() {
   const [file, setFile] = useState(null);
@@ -50,14 +52,18 @@ export default function HomePage() {
   const scrollToUpload = () => {
     uploadSectionRef.current?.scrollIntoView({ behavior: "smooth" });
   };
-  const scrollToContact = () => {
-    uploadSectionRef.current?.scrollIntoView({behavior: "smooth"});
-  };
-  const scrollToAbout = () => {
-    uploadSectionRef.current?.scrollIntoView({behavior: "smooth"});
-  };
 
-  const downloadPDF = () => { 
+  const contactSectionRef = useRef(null);
+
+
+  const scrollToContact = () => {
+    contactSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+  // const scrollToAbout = () => {
+  //   uploadSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+  // };
+
+  const downloadPDF = () => {
     if (!feedback) return;
 
     const doc = new jsPDF();

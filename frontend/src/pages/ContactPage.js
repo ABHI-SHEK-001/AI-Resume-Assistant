@@ -10,10 +10,10 @@ const Contact = () => {
 
     emailjs
       .sendForm(
-        "service_yu5tkok",     // Replace with your service ID
-        "template_1f1pzuu",    // Replace with your template ID
+        "service_yu5tkok",     
+        "template_1f1pzuu",    
         form.current,
-        "AU6Qkr9wpMpg0klz5"      // Replace with your public key (user ID)
+        "AU6Qkr9wpMpg0klz5"     
       )
       .then(
         (result) => {
@@ -82,11 +82,6 @@ const Contact = () => {
 
         {status && <p className="mt-4 text-green-600 text-center">{status}</p>}
       </form>
-
-      <div className="mt-8 text-gray-600 text-center">
-        <p>Email: <a className="text-blue-500 hover:underline" href="mailto:yourteam@email.com">yourteam@email.com</a></p>
-        <p className="mt-2">GitHub: <a className="text-blue-500 hover:underline" href="https://github.com/yourrepo" target="_blank" rel="noreferrer">github.com/yourrepo</a></p>
-      </div>
     </div>
   );
 };
